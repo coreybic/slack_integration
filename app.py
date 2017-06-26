@@ -10,6 +10,7 @@ import bot
 from flask import Flask, request, make_response, render_template
 
 pyBot = bot.Bot()
+port = int(os.environ.get("PORT", 5000))
 
 slack = pyBot.client
 
@@ -116,4 +117,4 @@ def hears():
                          you're looking for.", 404, {"X-Slack-No-Retry": 1})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=port)

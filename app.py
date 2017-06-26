@@ -4,6 +4,7 @@ A routing layer for the onboarding bot tutorial built using
 [Slack's Events API](https://api.slack.com/events-api) in Python
 """
 from pprint import pprint
+import os
 import sys
 import json
 import bot

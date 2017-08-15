@@ -40,11 +40,17 @@ def _event_handler(event_type, slack_event):
     # ================ Team Join Events =============== #
     # When the user first joins a team, the type of event will be team_join
     if event_type == "reaction_added":
+        user_id = slack_event["event"]["user"]
+        ts = slack_event['event']['item']['ts']
+        channel_id = slack_event['event']['item']['channel']
+
         if slack_event["event"]["reaction"] == "middle_finger":
-            user_id = slack_event["event"]["user"]
-            ts = slack_event['event']['event_ts']
-            channel_id = slack_event['event']['item']['channel']
             pyBot.question_get(team_id, channel_id, user_id, ts)
+
+
+        elif slack_event['event']['reaction'] == "white_check_mark":
+            pyBot.answer_get(team_id, channel_id, user_id, ts)
+            
 
     message = "You have not added an event handler for the %s" % event_type
     # Return a helpful error message
@@ -86,6 +92,7 @@ def hears():
     handler helper function to route events to our Bot.
     """
     slack_event = json.loads(request.data)
+
     # ============= Slack URL Verification ============ #
     # In order to verify the url of our endpoint, Slack will send a challenge
     # token in a request and check for this token in the response our endpoint

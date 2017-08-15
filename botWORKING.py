@@ -44,7 +44,6 @@ class Bot(object):
         # persistantly in  a database.
         self.messages = {}
         self.last_question = -1
-        self.last_channel = ''
 
 
     def question_get(self, team_id, channel_id, user_id, ts):
@@ -53,33 +52,16 @@ class Bot(object):
 
         #request for the message at the same time in the same channel by the same user
         #format it and send it to ahub
-        slack_data1 = self.client.api_call(
+        slack_data = self.client.api_call(
                                 "channels.history",
                                 channel = channel_id,
                                 latest = ts,
                                 inclusive = 'false',
                                 count = 1
                                 )
-        slack_data2 = self.client.api_call(
-                                "im.history",
-                                channel = channel_id,
-                                latest = ts,
-                                inclusive = 'false',
-                                count = 1
-                                )
-
-        #pprint(slack_data1)
-        pprint(slack_data2['messages'][0]['text'])
-
-        slack_message = ''
-        if 'messages' in slack_data1:
-            slack_message = slack_data1['messages'][0]['text']
-        elif 'messages' in slack_data2:
-            slack_message = slack_data2['messages'][0]['text']
-
 
         #slack_message = slack_data['messages'][0]['text']
-        self.last_channel = channel_id
+        slack_message = slack_data
         pprint(slack_message)
 
         # headers, paramaters and data to post as question on AHUB
@@ -111,7 +93,7 @@ class Bot(object):
 
             host = "https://nominum.cloud.answerhub.com"
             url = host + "/services/v2/question.json"   
-            ###########
+
             #response = requests.post(url, headers=headers, auth=("slack_bot", "nominum76"), params=params, json=data)
             #get question id of posted question for possible answering
             question_id = requests.get("https://nominum.cloud.answerhub.com/services/v2/question.json", 
@@ -147,31 +129,14 @@ class Bot(object):
 
     def answer_get(self, team_id, channel_id, user_id, ts):
         switch = True
-        slack_data1 = self.client.api_call(
-                                "channels.history",
+        slack_data = self.client.api_call(
+                                "groups.history",
                                 channel = channel_id,
                                 latest = ts,
-                                inclusive = 'false',
+                                inclusive = 'true',
                                 count = 1
                                 )
-        slack_data2 = self.client.api_call(
-                                "im.history",
-                                channel = channel_id,
-                                latest = ts,
-                                inclusive = 'false',
-                                count = 1
-                                )
-
-
-        slack_message = ''
-        if 'messages' in slack_data1:
-            slack_message = slack_data1['messages'][0]['text']
-        elif 'messages' in slack_data2:
-            slack_message = slack_data2['messages'][0]['text']
-
-
-        slack_answer = slack_message
-        pprint(slack_message)
+        slack_answer = slack_data['messages'][0]['text']
 
         headers = {
                'Accept': 'application/json',
@@ -188,11 +153,11 @@ class Bot(object):
             if a['body'][:15] == slack_answer[:15]:
                 switch = False
 
-        if switch and self.last_question != -1 and channel_id == self.last_channel:
+        if switch and self.last_question != -1:
             print "yes"
             host = "https://nominum.cloud.answerhub.com"
             url = host + "/services/v2/question/%s/answer.json" % (self.last_question)  
-            ##########
+
             #response = requests.post(url, headers=headers, auth=("slack_bot", "nominum76"), params=params, json={'body': slack_answer})
 
         else:

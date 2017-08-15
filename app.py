@@ -11,7 +11,6 @@ import bot
 from flask import Flask, request, make_response, render_template
 
 pyBot = bot.Bot()
-port = int(os.environ.get("PORT", 5000))
 
 slack = pyBot.client
 
@@ -126,7 +125,5 @@ def hears():
                          you're looking for.", 404, {"X-Slack-No-Retry": 1})
 
 if __name__ == '__main__':
-    if __name__ == '__main__':
-    # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', debug = True, port=port)

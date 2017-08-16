@@ -61,7 +61,7 @@ class Bot(object):
                                 )
 
         #pprint(slack_data1)
-        pprint(slack_data2['messages'][0]['text'])
+        #pprint(slack_data2['messages'][0]['text'])
 
         slack_message = ''
         if 'messages' in slack_data1:

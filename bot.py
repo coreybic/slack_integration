@@ -60,17 +60,12 @@ class Bot(object):
                                 count = 1
                                 )
 
-        #pprint(slack_data1)
-        #pprint(slack_data2['messages'][0]['text'])
-
         slack_message = ''
         if 'messages' in slack_data1:
             slack_message = slack_data1['messages'][0]['text']
         elif 'messages' in slack_data2:
             slack_message = slack_data2['messages'][0]['text']
 
-
-        #slack_message = slack_data['messages'][0]['text']
         self.last_channel = channel_id
         pprint(slack_message)
 

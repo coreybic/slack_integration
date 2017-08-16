@@ -44,7 +44,7 @@ def _event_handler(event_type, slack_event):
         ts = slack_event['event']['item']['ts']
         channel_id = slack_event['event']['item']['channel']
 
-        if slack_event["event"]["reaction"] == "middle_finger":
+        if slack_event["event"]["reaction"] == "question":
             pyBot.question_get(team_id, channel_id, user_id, ts)
 
 

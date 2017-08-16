@@ -22,23 +22,9 @@ def _event_handler(event_type, slack_event):
     """
     A helper function that routes events from Slack to our Bot
     by event type and subtype.
-
-    Parameters
-    ----------
-    event_type : str
-        type of event recieved from Slack
-    slack_event : dict
-        JSON response from a Slack reaction event
-
-    Returns
-    ----------
-    obj
-        Response object with 200 - ok or 500 - No Event Handler error
-
     """
     team_id = slack_event["team_id"]
-    # ================ Team Join Events =============== #
-    # When the user first joins a team, the type of event will be team_join
+
     if event_type == "reaction_added":
         user_id = slack_event["event"]["user"]
         ts = slack_event['event']['item']['ts']
@@ -53,7 +39,6 @@ def _event_handler(event_type, slack_event):
             
 
     message = "You have not added an event handler for the %s" % event_type
-    # Return a helpful error message
     return make_response(message, 200, {"X-Slack-No-Retry": 1})
 
 

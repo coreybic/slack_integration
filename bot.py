@@ -10,15 +10,8 @@ from requests.auth import HTTPDigestAuth
 
 from slackclient import SlackClient
 
-# To remember which teams have authorized your app and what tokens are
-# associated with each team, we can store this information in memory on
-# as a global object. When your bot is out of development, it's best to
-# save this in a more persistant memory store.
-authed_teams = {}
-
 
 class Bot(object):
-    """ Instanciates a Bot object to handle Slack onboarding interactions."""
     def __init__(self):
         super(Bot, self).__init__()
         self.name = "pythonboardingbot"
@@ -110,8 +103,9 @@ class Bot(object):
 
             host = "https://nominum.cloud.answerhub.com"
             url = host + "/services/v2/question.json"   
-            ###########
+            
             #response = requests.post(url, headers=headers, auth=("slack_bot", "nominum76"), params=params, json=data)
+
             #get question id of posted question for possible answering
             question_id = requests.get("https://nominum.cloud.answerhub.com/services/v2/question.json", 
                 auth = ('slack_bot', 'nominum76'),
@@ -120,28 +114,8 @@ class Bot(object):
 
             if len(question_id['list']) > 0:
                 self.last_question = question_id['list'][0]['id']
-                #print last_question
-                #pprint(response)
         else:
             print "no"
-            
-        
-        
-        #get question id of posted question for possible answering
-        """ question_id = requests.get("https://nominum.cloud.answerhub.com/services/v2/question.json", 
-            auth = ('slack_bot', 'nominum76'),
-            headers = headers,
-            params = params).json()
-
-        self.last_question = question_id['list'][0]['id']"""
-        #last_question = questions['list'][0]['title']
-        #pprint(slack_data['messages'][0]['text'])
-
-
-
-
-
-
 
 
     def answer_get(self, team_id, channel_id, user_id, ts):
@@ -191,7 +165,7 @@ class Bot(object):
             print "yes"
             host = "https://nominum.cloud.answerhub.com"
             url = host + "/services/v2/question/%s/answer.json" % (self.last_question)  
-            ##########
+            
             #response = requests.post(url, headers=headers, auth=("slack_bot", "nominum76"), params=params, json={'body': slack_answer})
 
         else:

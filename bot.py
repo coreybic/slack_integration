@@ -3,7 +3,6 @@
 Python Slack Bot class for use with the pythOnBoarding app
 """
 import os
-import message
 from pprint import pprint
 import requests
 from requests.auth import HTTPDigestAuth
